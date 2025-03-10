@@ -1,0 +1,65 @@
+src/
+├── main/
+│   ├── java/
+│   │   └── com/
+│   │       └── oficina/
+│   │           ├── application/          # Casos de uso da aplicação
+│   │           │   ├── port/             # Portas de entrada (interfaces)
+│   │           │   │   ├── EstoqueService.java
+│   │           │   │   ├── UsuarioService.java
+│   │           │   │   ├── VendaService.java
+│   │           │   │   └── FilaService.java
+│   │           │   └── service/          # Implementações dos serviços
+│   │           │       ├── EstoqueServiceImpl.java
+│   │           │       ├── UsuarioServiceImpl.java
+│   │           │       ├── VendaServiceImpl.java
+│   │           │       └── FilaServiceImpl.java
+│   │           ├── domain/               # Entidades e regras de negócio
+│   │           │   ├── model/            # Modelos de domínio
+│   │           │   │   ├── Produto.java
+│   │           │   │   ├── Usuario.java
+│   │           │   │   ├── Venda.java
+│   │           │   │   ├── ItemVenda.java
+│   │           │   │   └── Cliente.java
+│   │           │   └── exception/        # Exceções de domínio
+│   │           │       ├── EstoqueInsuficienteException.java
+│   │           │       └── EntidadeNaoEncontradaException.java
+│   │           ├── infrastructure/       # Adaptadores e implementações externas
+│   │           │   ├── config/           # Configurações
+│   │           │   │   ├── SecurityConfig.java
+│   │           │   │   └── SwaggerConfig.java
+│   │           │   ├── persistence/      # Persistência de dados
+│   │           │   │   ├── entity/       # Entidades JPA
+│   │           │   │   │   ├── ProdutoEntity.java
+│   │           │   │   │   ├── UsuarioEntity.java
+│   │           │   │   │   └── VendaEntity.java
+│   │           │   │   ├── repository/   # Repositórios Spring Data JPA
+│   │           │   │   │   ├── ProdutoRepository.java
+│   │           │   │   │   ├── UsuarioRepository.java
+│   │           │   │   │   └── VendaRepository.java
+│   │           │   │   └── adapter/      # Adaptadores de repositório
+│   │           │   │       ├── ProdutoRepositoryAdapter.java
+│   │           │   │       ├── UsuarioRepositoryAdapter.java
+│   │           │   │       └── VendaRepositoryAdapter.java
+│   │           │   └── rest/             # Controladores REST
+│   │           │       ├── ProdutoController.java
+│   │           │       ├── UsuarioController.java
+│   │           │       ├── VendaController.java
+│   │           │       ├── FilaController.java
+│   │           │       └── dto/          # DTOs para transferência de dados
+│   │           │           ├── ProdutoDTO.java
+│   │           │           ├── UsuarioDTO.java
+│   │           │           ├── VendaDTO.java
+│   │           │           └── ClienteDTO.java
+│   │           └── SistemaGestaoApplication.java  # Classe principal
+│   └── resources/
+│       ├── application.properties        # Configurações da aplicação
+│       ├── application-dev.properties    # Configurações de desenvolvimento
+│       └── application-prod.properties   # Configurações de produção
+└── test/                                 # Testes automatizados
+    └── java/
+        └── com/
+            └── oficina/
+                ├── application/          # Testes de serviços
+                ├── domain/               # Testes de domínio
+                └── infrastructure/       # Testes de infraestrutura
