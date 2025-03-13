@@ -7,6 +7,21 @@ server:
   servlet:
     context-path: /sistema-gestao
 
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/sistema_gestao
+#    username: postgres
+#    password: admin
+#    driver-class-name: org.postgresql.Driver
+#    dialect: org.hibernate.dialect.PostgreSQLDialect
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+
   datasource:
     url: jdbc:h2:file:./data/oficina
     driverClassName: org.h2.Driver
@@ -29,10 +44,10 @@ server:
 logging:
   level:
     org.springframework: INFO
-    com.oficina: DEBUG
+    security: DEBUG
 
 
-security:
-    user:
-      name: admin
-      password: admin
+#security:
+#    user:
+#      name: sa
+#      password: password

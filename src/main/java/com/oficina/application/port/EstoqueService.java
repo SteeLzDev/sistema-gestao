@@ -3,7 +3,6 @@ package com.oficina.application.port;
 import com.oficina.domain.model.Produto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EstoqueService {
 

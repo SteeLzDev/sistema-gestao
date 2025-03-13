@@ -3,7 +3,7 @@ package com.oficina.application.service;
 import com.oficina.application.port.EstoqueService;
 import com.oficina.domain.exception.EntidadeNaoEncontradaException;
 import com.oficina.domain.model.Produto;
-import com.oficina.infrastructure.persistense.repository.ProdutoRepository;
+import com.oficina.infrastructure.persistence.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

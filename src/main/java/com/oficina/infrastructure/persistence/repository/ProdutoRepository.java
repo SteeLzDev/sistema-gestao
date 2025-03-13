@@ -1,4 +1,4 @@
-package com.oficina.infrastructure.persistense.repository;
+package com.oficina.infrastructure.persistence.repository;
 
 import com.oficina.domain.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;

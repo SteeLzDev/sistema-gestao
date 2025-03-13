@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class Produto {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -25,6 +26,10 @@ public class Produto {
 
     @Column(nullable = false)
     private BigDecimal preco;
+
+    public Produto(){
+
+    }
 
     public Produto(Long id, String codigo, String nome , String categoria, Integer quantidade, BigDecimal preco) {
         this.id = id;

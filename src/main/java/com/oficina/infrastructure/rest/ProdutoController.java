@@ -63,7 +63,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtosDTO);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping//("/{id}")
     public ResponseEntity<ProdutoDTO> criarProduto (@RequestBody ProdutoDTO produtoDTO) {
         Produto produto = converteToEntity(produtoDTO);
         Produto produtoSalvo = estoqueService.salvarProduto(produto);
@@ -140,6 +140,8 @@ public class ProdutoController {
                 dto.getPreco()
         );
     }
+
+
 
 
 
