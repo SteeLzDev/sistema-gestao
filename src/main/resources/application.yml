@@ -36,6 +36,12 @@ server:
       hibernate:
         format_sql: true
 
+  jwt:
+    secret: MINHA_CHAVE_SECRETA_123456789
+    expiration: 86400000  # Tempo de expiração do token (em milissegundos) - 1 dia
+    refresh-token:
+      expiration: 604800000  # Tempo de expiração do refresh token (7 dias)
+
   h2:
     console:
       enabled: true
