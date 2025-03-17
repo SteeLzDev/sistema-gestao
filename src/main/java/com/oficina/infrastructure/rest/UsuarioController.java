@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("api/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -29,12 +29,8 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarUsuario(@PathVariable Long id) {
-        try {
-            Usuario usuario = usuarioService.buscarUsuarioPorId(id);
-            return ResponseEntity.ok(usuario);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Usuario usuario = usuarioService.buscarUsuarioPorId(id);
+        return ResponseEntity.ok(usuario);
     }
 
     @PostMapping
@@ -45,21 +41,16 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
-        try {
-            Usuario usuarioAtualizado = usuarioService.atualizarUsuario(id, usuario);
-            return ResponseEntity.ok(usuarioAtualizado);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+        usuario.setId(id);
+        Usuario usuarioAtualizado = usuarioService.salvarUsuario(usuario);
+        return ResponseEntity.ok(usuarioAtualizado);
+
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerUsuario(@PathVariable Long id) {
-        try {
-            usuarioService.removerUsuario(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+        return ResponseEntity.noContent().build();
     }
+
 }

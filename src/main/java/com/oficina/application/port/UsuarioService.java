@@ -10,7 +10,8 @@ public interface UsuarioService {
         Usuario buscarUsuarioPorId(Long id);
         Usuario buscarUsuarioPorUsername(String username);
         Usuario salvarUsuario(Usuario usuario);
-        Usuario atualizarUsuario(Long id, Usuario usuario);
+        Usuario buscarUsuarioPorEmail (String email);
+        //Usuario atualizarUsuario(Long id, Usuario usuario);
         void removerUsuario(Long id);
-        Usuario autenticarPorUsername(String username, String senha);
+        //Usuario autenticarPorUsername(String username, String senha);
     }

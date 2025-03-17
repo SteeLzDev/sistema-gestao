@@ -15,12 +15,10 @@ import java.util.List;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,38 +35,19 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario buscarUsuarioPorUsername(String username) {
         return usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário", username));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário",  "username" + username));
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorEmail (String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário", "email" + email));
     }
 
     @Override
     @Transactional
     public Usuario salvarUsuario(Usuario usuario) {
-        // Criptografar a senha antes de salvar
-        if (usuario.getSenha() != null && !usuario.getSenha().startsWith("$2a$")) {
-            usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        }
         return usuarioRepository.save(usuario);
-    }
-
-    @Override
-    @Transactional
-    public Usuario atualizarUsuario(Long id, Usuario usuario) {
-        Usuario usuarioExistente = buscarUsuarioPorId(id);
-
-        // Atualizar campos
-        usuarioExistente.setNome(usuario.getNome());
-        usuarioExistente.setUsername(usuario.getUsername());
-        usuarioExistente.setEmail(usuario.getEmail());
-        usuarioExistente.setCargo(usuario.getCargo());
-        usuarioExistente.setPerfil(usuario.getPerfil());
-        usuarioExistente.setStatus(usuario.getStatus());
-
-        // Atualizar senha apenas se fornecida
-        if (usuario.getSenha() != null && !usuario.getSenha().isEmpty() && !usuario.getSenha().startsWith("$2a$")) {
-            usuarioExistente.setSenha(passwordEncoder.encode(usuario.getSenha()));
-        }
-
-        return usuarioRepository.save(usuarioExistente);
     }
 
     @Override
@@ -78,15 +57,4 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    @Override
-    public Usuario autenticarPorUsername(String username, String senha) {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
-
-        if (!passwordEncoder.matches(senha, usuario.getSenha())) {
-            throw new IllegalArgumentException("Senha inválida");
-        }
-
-        return usuario;
-    }
 }

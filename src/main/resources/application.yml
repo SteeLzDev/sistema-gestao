@@ -22,6 +22,14 @@ server:
 #      hibernate:
 #        format_sql: true
 
+  # Configuração para inicializar o schema antes de executar data.sql
+    jpa:
+     defer-datasource-initialization: true
+    sql:
+      init:
+        mode: always
+        continue-on-error: false
+
   datasource:
     url: jdbc:h2:file:./data/oficina
     driverClassName: org.h2.Driver
@@ -31,6 +39,9 @@ server:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      mode: always
     show-sql: true
     properties:
       hibernate:
