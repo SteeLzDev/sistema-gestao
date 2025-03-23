@@ -29,7 +29,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
-        final String authorizationHeader = request.getHeader("Authorization");
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/fila")) {
+            chain.doFilter(request, response);
+            return;
+        }
+        final String authorizationHeader = request.getHeader("Autorization");
 
         String username = null;
         String jwt = null;

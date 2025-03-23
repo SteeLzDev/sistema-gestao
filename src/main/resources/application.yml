@@ -2,69 +2,58 @@ spring:
   application:
     name: sistema-gestao
 
-server:
-  port: 8080
-  servlet:
-    context-path: /sistema-gestao
-
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/sistema_gestao
-#    username: postgres
-#    password: admin
-#    driver-class-name: org.postgresql.Driver
-#    dialect: org.hibernate.dialect.PostgreSQLDialect
-#  jpa:
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-
-  # Configuração para inicializar o schema antes de executar data.sql
-    jpa:
-     defer-datasource-initialization: true
-    sql:
-      init:
-        mode: always
-        continue-on-error: false
-
+  # Configuração do banco de dados H2
   datasource:
     url: jdbc:h2:file:./data/oficina
     driverClassName: org.h2.Driver
     username: sa
     password: password
+
+  # Configuração do console H2
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # Configuração JPA
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
-  sql:
-    init:
-      mode: always
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+    defer-datasource-initialization: true
 
+  # Configuração de inicialização SQL
+  sql:
+    init:
+      mode: always
+      platform: h2
+      continue-on-error: false
+
+  # Configuração JWT
   jwt:
     secret: MINHA_CHAVE_SECRETA_123456789
     expiration: 86400000  # Tempo de expiração do token (em milissegundos) - 1 dia
     refresh-token:
       expiration: 604800000  # Tempo de expiração do refresh token (7 dias)
 
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  # IMPORTANTE: Adicionar esta configuração para resolver o problema de dependência circular
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
 
+# Configuração do servidor
+server:
+  port: 8080
+  servlet:
+    context-path: /sistema-gestao
+
+# Configuração de logging
 logging:
   level:
     org.springframework: INFO
-    security: DEBUG
+    org.springframework.security: DEBUG
 
-
-#security:
-#    user:
-#      name: sa
-#      password: password
