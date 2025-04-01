@@ -13,5 +13,8 @@ import java.util.List;
 public interface VendaRepository extends JpaRepository <Venda, Long> {
     List<Venda> findByClienteContainingIgnoreCase(String cliente);
     List<Venda> findByDataHoraBetween(LocalDateTime inicio, LocalDateTime fim);
+    List<Venda> findByDataHoraAfterOrderByDataHoraDesc(LocalDateTime dataInicio);
+    List<Venda> findByDataHoraBetweenOrderByDataHoraDesc(LocalDateTime dataInicio, LocalDateTime dataFim);
+
 
 }
