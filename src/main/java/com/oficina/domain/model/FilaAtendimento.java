@@ -25,7 +25,8 @@ public class FilaAtendimento {
 
     @Column(nullable = false)
     private LocalDateTime chegada;
-
+    
+    @Transient
     private String espera;
 
     @Column(nullable = false)
