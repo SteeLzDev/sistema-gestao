@@ -33,7 +33,7 @@ public class FilaServiceImpl implements FilaService {
 
     @Override
     public List <Atendimento> listarAtendimentosEmAndamento() {
-        return atendimentoRepository.findByStatus("EM_ANDAMENTO");
+        return atendimentoRepository.findByStatus("Em andamento");
     }
 
     @Override
