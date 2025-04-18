@@ -1,6 +1,9 @@
 package com.oficina.infrastructure.rest.dto;
 
 import com.oficina.domain.model.Usuario;
+import org.apache.catalina.User;
+
+import java.util.List;
 
 public class AuthResponse {
 
@@ -11,6 +14,12 @@ public class AuthResponse {
     public AuthResponse(String token, Usuario usuario) {
         this.token = token;
         this.user = new UserDTO(usuario);
+    }
+
+    public AuthResponse(String token, Usuario usuario, List<String> permissoes) {
+        this.token = token;
+        this.user = new UserDTO(usuario, permissoes);
+
     }
 
     public String getToken() {
@@ -38,6 +47,7 @@ public class AuthResponse {
         private String cargo;
         private String perfil;
         private String status;
+        private List<String> permissoes;
 
         public UserDTO(Usuario usuario) {
             this.id = usuario.getId();
@@ -46,7 +56,12 @@ public class AuthResponse {
             this.email = usuario.getEmail();
             this.cargo = usuario.getCargo();
             this.perfil = usuario.getPerfil();
-            this.status = usuario.getCargo();
+            this.status = usuario.getStatus();
+        }
+
+        public UserDTO(Usuario usuario, List<String> permissoes) {
+            this(usuario);
+            this.permissoes = permissoes;
         }
 
         public long getId() {
@@ -103,6 +118,14 @@ public class AuthResponse {
 
         public void setStatus(String status) {
             this.status = status;
+        }
+
+        public List<String> getPermissoes() {
+            return permissoes;
+        }
+
+        public void setPermissoes(List<String> permissoes) {
+            this.permissoes = permissoes;
         }
     }
 

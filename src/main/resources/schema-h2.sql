@@ -1,73 +1,36 @@
--- Primeiro, remover as tabelas com chaves estrangeiras
-DROP TABLE IF EXISTS itens_venda;
+-- Primeiro, excluir tabelas que têm chaves estrangeiras
+DROP TABLE IF EXISTS usuarios_permissoes;
+-- Outras tabelas dependentes aqui...
 
--- Depois, remover as tabelas referenciadas
-DROP TABLE IF EXISTS vendas;
-DROP TABLE IF EXISTS produtos;
+-- Depois, excluir as tabelas principais
+DROP TABLE IF EXISTS permissoes;
 DROP TABLE IF EXISTS usuarios;
-DROP TABLE IF EXISTS fila_atendimento;
-DROP TABLE IF EXISTS atendimentos;
+-- Outras tabelas principais aqui...
 
--- Create usuarios table
-CREATE TABLE usuarios (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(255) NOT NULL,
-username VARCHAR(100) NOT NULL UNIQUE,
-email VARCHAR(255) NOT NULL,
-senha VARCHAR(255) NOT NULL,
-cargo VARCHAR(100),
-perfil VARCHAR(100),
-status VARCHAR(50)
+-- Criar tabelas na ordem correta
+CREATE TABLE IF NOT EXISTS usuarios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    cargo VARCHAR(50),
+    perfil VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL
 );
 
--- Create produtos table
-CREATE TABLE produtos (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-codigo VARCHAR(100) NOT NULL UNIQUE,
-nome VARCHAR(255) NOT NULL,
-categoria VARCHAR(100) NOT NULL,
-quantidade INT NOT NULL,
-preco DECIMAL(10, 2) NOT NULL
+CREATE TABLE IF NOT EXISTS permissoes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+    descricao VARCHAR(255)
 );
 
--- Create vendas table
-CREATE TABLE vendas (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-cliente VARCHAR(255) NOT NULL,
-data_hora TIMESTAMP NOT NULL,
-valor_total DECIMAL(10, 2) NOT NULL
+CREATE TABLE IF NOT EXISTS usuarios_permissoes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id BIGINT NOT NULL,
+    permissao_id BIGINT NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (permissao_id) REFERENCES permissoes(id)
 );
 
--- Create itens_venda table
-CREATE TABLE itens_venda (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-venda_id BIGINT NOT NULL,
-produto_id BIGINT NOT NULL,
-quantidade INT NOT NULL,
-preco_unitario DECIMAL(10, 2) NOT NULL,
-subtotal DECIMAL(10, 2) NOT NULL,
-FOREIGN KEY (venda_id) REFERENCES vendas(id),
-FOREIGN KEY (produto_id) REFERENCES produtos(id)
-);
-
--- Create fila_atendimento table
-CREATE TABLE fila_atendimento (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(255) NOT NULL,
-servico VARCHAR(255) NOT NULL,
-telefone VARCHAR(20),
-observacoes VARCHAR(500),
-prioridade VARCHAR(50) NOT NULL,
-chegada TIMESTAMP NOT NULL,
-status VARCHAR(50) NOT NULL
-);
-
--- Create atendimentos table
-CREATE TABLE atendimentos (
-id BIGINT AUTO_INCREMENT PRIMARY KEY,
-nome VARCHAR(255) NOT NULL,
-servico VARCHAR(255) NOT NULL,
-inicio TIMESTAMP NOT NULL,
-atendente VARCHAR(255) NOT NULL,
-status VARCHAR(50) NOT NULL
-);
+-- Outras criações de tabela aqui...
