@@ -59,38 +59,3 @@ public class PermissaoAuthorizationManager {
         };
     }
 }
-
-/*@Component
-public class PermissaoAuthorizationManager {
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    public AuthorizationManager<RequestAuthorizationContext> hasAnyPermission(String... permissoes) {
-        return (Supplier<Authentication> authentication, RequestAuthorizationContext context) -> {
-            if (authentication == null || !authentication.get().isAuthenticated()) {
-                return new AuthorizationDecision(false);
-            }
-
-            String authHeader = context.getRequest().getHeader("Authorization ");
-            if (authHeader == null || !authHeader.startsWith("Baerer")) {
-                return new AuthorizationDecision(false);
-            }
-
-            String token = authHeader.substring(7);
-
-            try {
-                List<String> userPermissoes = jwtTokenUtil.extractPermissoes(token);
-                for (String permissao : permissoes) {
-                    if (userPermissoes.contains(permissao)) {
-                        return new AuthorizationDecision(true);
-                    }
-                }
-            } catch (Exception e) {
-                return new AuthorizationDecision(false);
-            }
-            return new AuthorizationDecision(false);
-        };
-    }*/
-
-//}
