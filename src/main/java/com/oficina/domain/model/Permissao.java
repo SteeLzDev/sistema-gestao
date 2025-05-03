@@ -1,9 +1,6 @@
 package com.oficina.domain.model;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "permissoes")
@@ -11,28 +8,31 @@ public class Permissao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String nome;
 
-    @Column(length = 255)
+    @Column
     private String descricao;
 
     public Permissao() {
     }
 
-    public Permissao(Long id, String nome, String descricao){
-        this.id = id;
+    public Permissao(String nome) {
+        this.nome = nome;
+    }
+
+    public Permissao(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,11 +53,20 @@ public class Permissao {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Permissao permissao = (Permissao) o;
+        return nome != null && nome.equals(permissao.nome);
+    }
+
+    @Override
+    public int hashCode() {
+        return nome != null ? nome.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
-        return "Permissao{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                '}';
+        return nome;
     }
 }

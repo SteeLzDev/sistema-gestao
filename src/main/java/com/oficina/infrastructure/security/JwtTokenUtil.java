@@ -11,10 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -37,6 +34,11 @@ public class JwtTokenUtil {
 
     public String generateToken(UserDetails userDetails, List<String> permissoes ) {
         Map<String, Object> claims = new HashMap<>();
+//        List<String> permissoesAtualizadas = new ArrayList<>(permissoes);
+//        if (permissoes.contains("VENDAS_VISUALIZAR") && !permissoes.contains("VENDA_VISUALIZAR")){
+//            permissoesAtualizadas.add("VENDA_VISUALIZAR");
+//            logger.info("Adicionada permissão VENDA_ATUALIZAR ao token");
+//        }
         claims.put("permissoes", permissoes);
         return createToken(claims, userDetails.getUsername());
     }
@@ -71,7 +73,7 @@ public class JwtTokenUtil {
 
     private Claims extractAllClaims (String token) {
         return Jwts.parser()
-        .setSigningKey(key)
+                .setSigningKey(key)
                 .parseClaimsJws(token)
                 .getBody();
     }

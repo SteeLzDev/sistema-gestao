@@ -13,5 +13,6 @@ public interface UsuarioService {
         Usuario buscarUsuarioPorEmail (String email);
         //Usuario atualizarUsuario(Long id, Usuario usuario);
         void removerUsuario(Long id);
+        void inicializarPermissoesParaUsuario (Long id);
         //Usuario autenticarPorUsername(String username, String senha);
     }

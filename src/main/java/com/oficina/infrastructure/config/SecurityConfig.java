@@ -69,16 +69,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/produtos/**").access(permissaoAuthorizationManager.hasAnyPermission("ESTOQUE_EDITAR"))
                         .requestMatchers(HttpMethod.DELETE, "/api/produtos/**").access(permissaoAuthorizationManager.hasAnyPermission("ESTOQUE_REMOVER"))
 
-                        .requestMatchers("/api/vendas/**").access(permissaoAuthorizationManager.hasAnyPermission("VENDA_VISUALIZAR"))
-                        .requestMatchers(HttpMethod.POST, "/api/vendas/**").access(permissaoAuthorizationManager.hasAnyPermission("VENDA_CRIAR"))
+                        .requestMatchers("/api/vendas/**").access(permissaoAuthorizationManager.hasAnyPermission("VENDAS_VISUALIZAR"))
+                        .requestMatchers(HttpMethod.POST, "/api/vendas/**").access(permissaoAuthorizationManager.hasAnyPermission("VENDAS_CRIAR"))
                         .requestMatchers("/api/vendas/cancelar/**").access(permissaoAuthorizationManager.hasAnyPermission("VENDAS_CANCELAR"))
 
                         .requestMatchers("/api/fila/**").access(permissaoAuthorizationManager.hasAnyPermission("FILA_VISUALIZAR"))
                         .requestMatchers("/api/fila/gerenciar/**").access(permissaoAuthorizationManager.hasAnyPermission("FILA_GERENCIAR"))
+                        .requestMatchers(HttpMethod.DELETE, "/api/fila/**").access(permissaoAuthorizationManager.hasAnyPermission("FILA_GERENCIAR"))
 
                         .requestMatchers("/api/relatorios/**").access(permissaoAuthorizationManager.hasAnyPermission("RELATORIOS_VISUALIZAR"))
                         .requestMatchers("/api/relatorios/exportar/**").access(permissaoAuthorizationManager.hasAnyPermission("RELATORIOS_EXPORTAR"))
 
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").access(permissaoAuthorizationManager.hasAnyPermission("USUARIOS_REMOVER"))
                         .requestMatchers("/api/usuarios/**").access(permissaoAuthorizationManager.hasAnyPermission("USUARIOS_VISUALIZAR"))
                         .requestMatchers(HttpMethod.POST, "/api/usuarios/**").access(permissaoAuthorizationManager.hasAnyPermission("USUARIOS_CRIAR"))
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").access(permissaoAuthorizationManager.hasAnyPermission("USUARIOS_EDITAR"))
