@@ -2,6 +2,7 @@ package com.oficina.infrastructure.rest;
 
 
 import com.oficina.application.port.PermissaoService;
+import com.oficina.infrastructure.rest.dto.AtribuirPerfilDTO;
 import com.oficina.infrastructure.rest.dto.AtualizarPermissoesDTO;
 import com.oficina.infrastructure.rest.dto.PermissaoDTO;
 import com.oficina.infrastructure.rest.dto.UsuarioPermissoesDTO;
@@ -46,6 +47,12 @@ public class PermissaoController {
     @GetMapping("/usuario/{usuaruioId}/todas")
     public ResponseEntity<List<String>> obterTodasPermissoesDoUsuario(@PathVariable Long usuarioId) {
         return ResponseEntity.ok(permissaoService.obterNomesPermissoesDoUsuario(usuarioId));
+    }
+
+    @PostMapping("/atribuir-perfil")
+    public ResponseEntity<Void> atribuirPermissoesPorPerfil(@RequestBody AtribuirPerfilDTO dto) {
+        permissaoService.atribuirPermissoesPorPerfil(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

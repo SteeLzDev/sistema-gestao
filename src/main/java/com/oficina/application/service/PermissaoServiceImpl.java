@@ -9,6 +9,7 @@ import com.oficina.domain.model.UsuarioPermissao;
 import com.oficina.infrastructure.persistence.repository.PermissaoRepository;
 import com.oficina.infrastructure.persistence.repository.UsuarioPermissaoRepository;
 import com.oficina.infrastructure.persistence.repository.UsuarioRepository;
+import com.oficina.infrastructure.rest.dto.AtribuirPerfilDTO;
 import com.oficina.infrastructure.rest.dto.AtualizarPermissoesDTO;
 import com.oficina.infrastructure.rest.dto.PermissaoDTO;
 import com.oficina.infrastructure.rest.dto.UsuarioPermissoesDTO;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,13 +44,13 @@ public class PermissaoServiceImpl implements PermissaoService {
         //Permisões de Estoque
         adicionarPermissaoPadrao(permissoesPadrao, "ESTOQUE_VISUALIZAR", "Permissão para visualizar o estoque");
         adicionarPermissaoPadrao(permissoesPadrao, "ESTOQUE_ADICIONAR", "Permissão para adicionar itens ao estoque");
-        adicionarPermissaoPadrao(permissoesPadrao, "ESTOQUE EDITAR", "Permissão para editar itens do estoque");
-        adicionarPermissaoPadrao(permissoesPadrao, "ESTOQUE REMOVER", "Permissão para remover itens do estoque");
+        adicionarPermissaoPadrao(permissoesPadrao, "ESTOQUE_EDITAR", "Permissão para editar itens do estoque");
+        adicionarPermissaoPadrao(permissoesPadrao, "ESTOQUE_REMOVER", "Permissão para remover itens do estoque");
 
         //Permissões de Vendas
         adicionarPermissaoPadrao(permissoesPadrao, "VENDAS_VISUALIZAR", "Permissão para visualizar vendas");
         adicionarPermissaoPadrao(permissoesPadrao, "VENDAS_CRIAR", "Permissão para criar vendas");
-        adicionarPermissaoPadrao(permissoesPadrao, "VENDAS CANCELAR","Permissão para cancelar vendas");
+        adicionarPermissaoPadrao(permissoesPadrao, "VENDAS_CANCELAR","Permissão para cancelar vendas");
 
         //Permissões de Fila
         adicionarPermissaoPadrao(permissoesPadrao, "FILA_VISUALIZAR", "Permissão para visualizar fila de clientes");
@@ -178,6 +180,90 @@ public class PermissaoServiceImpl implements PermissaoService {
         return usuarioPermissaoRepository.findByUsuarioId(usuarioId).stream()
                 .map(up -> up.getPermissao().getNome())
                 .collect(Collectors.toList());
+
+    }
+
+    @Override
+    @Transactional
+    public void atribuirPermissoesPorPerfil (AtribuirPerfilDTO dto) {
+        Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário", dto.getUsuarioId()));
+
+        //Atualizar Perfil do Usuário
+        usuario.setPerfil(dto.getPerfil());
+        usuarioRepository.save(usuario);
+
+        //Remover permissões existentes
+        usuarioPermissaoRepository.deleteByUsuarioId(usuario.getId());
+
+        //Lista para armazenar as novas permissões
+        List<UsuarioPermissao> novasPermissoes = new ArrayList<>();
+
+        //Definir permissões com base no perfil
+        List<String> permissoesNomes;
+
+        switch (dto.getPerfil().toUpperCase()) {
+            case "ADMINISTRADOR":
+            case "ADMIN":
+
+                //Administrador tem todas as permissões
+                permissoesNomes = permissaoRepository.findAll().stream()
+                        .map(Permissao::getNome)
+                        .collect(Collectors.toList());
+                break;
+
+            case "GERENTE":
+                    //Permissoes para Gerente
+                permissoesNomes = Arrays.asList(
+                        "USUARIOS_VISUALIZAR", "USUARIOS_CRIAR", "USUARIOS_EDITAR",
+                        "ESTOQUE_VISUALIZAR", "ESTOQUE_ADICIONAR", "ESTOQUE_EDITAR", "ESTOQUE_REMOVER",
+                        "VENDAS_VISUALIZAR", "VENDAS_CRIAR", "VENDAS_CANCELAR",
+                        "FILA_VISUALIZAR", "FILA_GERENCIAR",
+                        "RELATORIOS_VISUALIZAR", "RELATORIOS_EXPORTAR"
+                );
+                break;
+
+            case "VENDEDOR":
+                // Permissões de vendedor
+                permissoesNomes = Arrays.asList(
+                        "ESTOQUE_VISUALIZAR",
+                        "VENDAS_VISUALIZAR", "VENDAS_CRIAR",
+                        "FILA_VISUALIZAR",
+                        "RELATORIOS_VISUALIZAR"
+                );
+                break;
+
+            case "OPERADOR":
+                // Permissões de operador
+                permissoesNomes = Arrays.asList(
+                        "ESTOQUE_VISUALIZAR",
+                        "FILA_VISUALIZAR", "FILA_GERENCIAR"
+                );
+                break;
+
+            default:
+                // Permissões básicas para outros perfis
+                permissoesNomes = Arrays.asList(
+                        "ESTOQUE_VISUALIZAR",
+                        "FILA_VISUALIZAR"
+                );
+                break;
+        }
+
+        //Buscar as permissões pelo nome e criar as associações
+        for (String nome : permissoesNomes) {
+            permissaoRepository.findByNome(nome).ifPresent(permissao -> {
+                UsuarioPermissao usuarioPermissao = new UsuarioPermissao();
+                usuarioPermissao.setUsuario(usuario);
+                usuarioPermissao.setPermissao(permissao);
+                novasPermissoes.add(usuarioPermissao);
+            });
+        }
+
+        //Salvar as Novas Permissões
+        if (!novasPermissoes.isEmpty()) {
+            usuarioPermissaoRepository.saveAll(novasPermissoes);
+        }
 
     }
 

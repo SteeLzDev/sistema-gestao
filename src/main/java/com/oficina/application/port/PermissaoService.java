@@ -1,5 +1,6 @@
 package com.oficina.application.port;
 
+import com.oficina.infrastructure.rest.dto.AtribuirPerfilDTO;
 import com.oficina.infrastructure.rest.dto.AtualizarPermissoesDTO;
 import com.oficina.infrastructure.rest.dto.PermissaoDTO;
 import com.oficina.infrastructure.rest.dto.UsuarioPermissoesDTO;
@@ -14,6 +15,7 @@ public interface PermissaoService {
     void atualizarPermissoesDoUsuario(AtualizarPermissoesDTO dto);
     boolean verificarPermissao(Long usuarioId, String nomePermissao);
     List<String> obterNomesPermissoesDoUsuario(Long usuarioId);
+    void atribuirPermissoesPorPerfil(AtribuirPerfilDTO dto);
 
 
 }
