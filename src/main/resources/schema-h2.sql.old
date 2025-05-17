@@ -1,3 +1,4 @@
+
 -- Primeiro, excluir tabelas que têm chaves estrangeiras
 DROP TABLE IF EXISTS usuarios_permissoes;
 -- Outras tabelas dependentes aqui...

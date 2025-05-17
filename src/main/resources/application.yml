@@ -2,58 +2,42 @@ spring:
   application:
     name: sistema-gestao
 
-  # Configuração do banco de dados H2
+  # Definindo explicitamente o perfil ativo como não sendo dev
+  profiles:
+    active: default
+
   datasource:
-    url: jdbc:h2:file:./data/oficina
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
+    url: jdbc:postgresql://localhost:5432/sistema_gestao
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
 
-  # Configuração do console H2
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-
-  # Configuração JPA
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  # Configuração de inicialização SQL
-  sql:
-    init:
-      mode: always
-      platform: h2
-      continue-on-error: false
-
-  # Configuração JWT
-  jwt:
-    secret: MINHA_CHAVE_SECRETA_123456789
-    expiration: 86400000  # Tempo de expiração do token (em milissegundos) - 1 dia
-    refresh-token:
-      expiration: 604800000  # Tempo de expiração do refresh token (7 dias)
-
-  # IMPORTANTE: Adicionar esta configuração para resolver o problema de dependência circular
+  # Configuração para resolver dependência circular
   main:
     allow-circular-references: true
     allow-bean-definition-overriding: true
 
-# Configuração do servidor
 server:
-  port: 8080
   servlet:
     context-path: /sistema-gestao
+  port: 8080
 
-# Configuração de logging
+jwt:
+  secret: ${JWT_SECRET:chave-secreta-temporaria-deve-ser-substituida-em-producao}
+  expiration: 86400000 # 24 horas em milissegundos
+
 logging:
   level:
-    org.springframework: INFO
-    org.springframework.security: DEBUG
-
+    org.springframework.security: INFO
+    com.oficina: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

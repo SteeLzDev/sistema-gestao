@@ -1,6 +1,5 @@
 package com.oficina.application.service;
 
-
 import com.oficina.application.port.PermissaoService;
 import com.oficina.domain.exception.EntidadeNaoEncontradaException;
 import com.oficina.domain.model.Permissao;
