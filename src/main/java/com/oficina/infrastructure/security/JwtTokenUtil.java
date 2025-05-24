@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
@@ -20,12 +22,18 @@ public class JwtTokenUtil {
 
     private static final Logger  logger = LoggerFactory.getLogger(JwtTokenUtil.class);
 
-    // Use uma chave segura para assinatura JWT (em produção, isso deve estar em application.yml)
+    // Usar uma chave segura para assinatura JWT (em produção, isso deve estar em application.yml)
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final SecretKey key;
 
     @Value("${jwt.expiration:86400000}") //24Horas
     private long jwtExpiration;
+
+    public JwtTokenUtil(@Value("${jwt.secret:defaultSecretKeyForDevelopmentEnvironmentOnly}") String secret) {
+        //Converter a string secreta em chave segura
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        logger.info("JwtTokenUtil inicializado com chave secreta");
+    }
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
@@ -34,11 +42,6 @@ public class JwtTokenUtil {
 
     public String generateToken(UserDetails userDetails, List<String> permissoes ) {
         Map<String, Object> claims = new HashMap<>();
-//        List<String> permissoesAtualizadas = new ArrayList<>(permissoes);
-//        if (permissoes.contains("VENDAS_VISUALIZAR") && !permissoes.contains("VENDA_VISUALIZAR")){
-//            permissoesAtualizadas.add("VENDA_VISUALIZAR");
-//            logger.info("Adicionada permissão VENDA_ATUALIZAR ao token");
-//        }
         claims.put("permissoes", permissoes);
         return createToken(claims, userDetails.getUsername());
     }
@@ -72,8 +75,9 @@ public class JwtTokenUtil {
     }
 
     private Claims extractAllClaims (String token) {
-        return Jwts.parser()
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }

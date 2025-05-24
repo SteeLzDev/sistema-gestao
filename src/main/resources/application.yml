@@ -6,10 +6,11 @@ spring:
   profiles:
     active: default
 
+  # Configuração do banco de dados
   datasource:
-    url: jdbc:postgresql://localhost:5432/sistema_gestao
-    username: postgres
-    password: admin
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:sistema_gestao}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
 
   jpa:
