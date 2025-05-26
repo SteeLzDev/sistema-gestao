@@ -1,0 +1,35 @@
+# fly.toml app configuration file generated for sistema-gestao on 2025-05-26T02:36:20-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'sistema-gestao'
+primary_region = 'gru'
+
+[build]
+  image = 'your-docker-image'
+
+[env]
+  DB_HOST = 'sistema-gestao-db.internal'
+  DB_NAME = 'sistema_gestao'
+  DB_PASSWORD = 'admin'
+  DB_PORT = '5432'
+  DB_USER = 'postgres'
+  JWT_SECRET = '${JWT_SECRET}'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8080
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

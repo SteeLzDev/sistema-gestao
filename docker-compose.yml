@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: sistema_gestao_db
+    environment:
+      POSTGRES_DB: sistema_gestao
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  sistema_gestao_app:
+    build: .
+    container_name: sistema_gestao_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: sistema_gestao_db
+      DB_PORT: 5432
+      DB_NAME: sistema_gestao
+      DB_USER: postgres
+      DB_PASSWORD: admin
+      JWT_SECRET: "${JWT_SECRET}"
+
+volumes:
+  postgres_data:
