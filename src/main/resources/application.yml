@@ -4,13 +4,13 @@ spring:
 
   # Definindo explicitamente o perfil ativo como não sendo dev
   profiles:
-    active: default
+    active: ${SPRING_PROFILES_ACTIVE:default}
 
   # Configuração do banco de dados
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:sistema_gestao}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:admin}
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -30,7 +30,7 @@ spring:
 server:
   servlet:
     context-path: /sistema-gestao
-  port: 8080
+  port: ${PORT:8080}
 
 jwt:
   secret: ${JWT_SECRET}

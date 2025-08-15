@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: sistema-gestao
+    env: docker
+    plan: free   # ou starter / standard etc.
+    autoDeploy: true
+    # Render usa o Dockerfile da raiz por padrão. Se estiver em outro caminho:
+    # dockerfilePath: ./Dockerfile
+    # Se precisar setar o context (subpasta):
+    # buildContext: ./
+    healthCheckPath: /sistema-gestao/actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8080
+      - key: DB_HOST
+        value: aws-1-sa-east-1.pooler.supabase.com
+      - key: DB_PORT
+        value: 6543
+      - key: DB_NAME
+        value: postgres
+      - key: DB_USER
+        value: postgres.zlfmtuzechkriiedyqlu
+      - key: DB_PASSWORD
+        sync: false   # marque como Secret no Render e preencha no painel
+      - key: JWT_SECRET
+        sync: false   # Secret também
+      - key: JAVA_TOOL_OPTIONS
+        value: -XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport
