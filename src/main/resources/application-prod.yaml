@@ -1,7 +1,9 @@
 spring:
+  application:
+    name: sistema-gestao
+
   datasource:
-    # use o POOLER IPv4 do Supabase (transaction) com ssl
-    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require&preferQueryMode=simple
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
@@ -25,11 +27,33 @@ spring:
           lob:
             non_contextual_creation: true
 
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+
 server:
-  # Render define ${PORT}; mantemos fallback 8080
   port: ${PORT:8080}
   servlet:
     context-path: /sistema-gestao
+
+management:
+  server:
+    # usa a MESMA porta do app (a do Render: $PORT)
+    port: ${PORT:8080}
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+  endpoint:
+    health:
+      probes:
+        enabled: true       # habilita /actuator/health/liveness e /readiness
+      show-details: never
+  health:
+    # Se o health continuar atrasando por causa do DB, troque para "false" temporariamente:
+    db:
+      enabled: true
 
 jwt:
   secret: ${JWT_SECRET}
@@ -38,7 +62,7 @@ jwt:
 logging:
   level:
     root: INFO
-    org.hibernate.SQL: WARN
-    org.hibernate.type.descriptor.sql.BasicBinder: WARN
     org.springframework.security: INFO
     com.oficina: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
