@@ -53,7 +53,7 @@ management:
   health:
     # Se o health continuar atrasando por causa do DB, troque para "false" temporariamente:
     db:
-      enabled: true
+      enabled: false
 
 jwt:
   secret: ${JWT_SECRET}
